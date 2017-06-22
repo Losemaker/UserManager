@@ -13,7 +13,7 @@ namespace AFS_Visicon.Controllers
         /// <summary>
         /// Home page of web application, display all users
         /// </summary>
-        /// <param name="sortKey">user attributefor sorting</param>
+        /// <param name="sortKey">user attribute for sorting</param>
         /// <param name="lastSortKey">name of last sorting attribute </param>
         /// <param name="searchString">name of user to search</param>
         /// <returns>view with filtered users</returns>
@@ -125,16 +125,16 @@ namespace AFS_Visicon.Controllers
         {
             using (UsersDbContext context = new UsersDbContext())
             {
-                User DbUser = context.Users.Single(x => x.UserID == id);
+                User dbUser = context.Users.Single(x => x.UserID == id);
 
                 if (ModelState.IsValid)
                 {
                     // set user attributes
-                    DbUser.FirstName = user.FirstName;
-                    DbUser.LastName = user.LastName;
-                    DbUser.DateOfBirth = user.DateOfBirth;
-                    DbUser.Mobil = user.Mobil;
-                    DbUser.Email = user.Email;
+                    dbUser.FirstName = user.FirstName;
+                    dbUser.LastName = user.LastName;
+                    dbUser.DateOfBirth = user.DateOfBirth;
+                    dbUser.Mobil = user.Mobil;
+                    dbUser.Email = user.Email;
 
                     context.SaveChanges();
                     return RedirectToAction("Index");

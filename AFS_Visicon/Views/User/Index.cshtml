@@ -18,13 +18,13 @@
     <thead class="table-bordered">
         <tr>
             <th>
-                @Html.ActionLink(nameof(AFS_Visicon.Models.User.FirstName), "Index", new { sortKey = nameof(AFS_Visicon.Models.User.FirstName), lastSortKey = ViewBag.lastSortKey })
+                @Html.ActionLink("First name", "Index", new { sortKey = nameof(AFS_Visicon.Models.User.FirstName), lastSortKey = ViewBag.lastSortKey })
             </th>
             <th>
-                @Html.ActionLink(nameof(AFS_Visicon.Models.User.LastName), "Index", new { sortKey = nameof(AFS_Visicon.Models.User.LastName), lastSortKey = ViewBag.lastSortKey })
+                @Html.ActionLink("Last name", "Index", new { sortKey = nameof(AFS_Visicon.Models.User.LastName), lastSortKey = ViewBag.lastSortKey })
             </th>
             <th>
-                @Html.ActionLink(nameof(AFS_Visicon.Models.User.DateOfBirth), "Index", new { sortKey = nameof(AFS_Visicon.Models.User.DateOfBirth), lastSortKey = ViewBag.lastSortKey })
+                @Html.ActionLink("Date of birth", "Index", new { sortKey = nameof(AFS_Visicon.Models.User.DateOfBirth), lastSortKey = ViewBag.lastSortKey })
             </th>
             <th>
                 @Html.ActionLink("Age", "Index", new { sortKey = "Age", lastSortKey = ViewBag.lastSortKey })
