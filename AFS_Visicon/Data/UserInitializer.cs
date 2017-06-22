@@ -3,13 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Data.Entity;
 
 namespace AFS_Visicon.Data
 {
-    public class UserInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<UsersDbContext>
+    public class UserInitializer : DropCreateDatabaseIfModelChanges<UsersDbContext>
     {
         /// <summary>
-        /// Full database with init values
+        /// Fill database with init values
         /// </summary>
         /// <param name="context">database</param>
         protected override void Seed(UsersDbContext context)

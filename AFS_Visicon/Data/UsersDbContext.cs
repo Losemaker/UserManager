@@ -10,14 +10,14 @@ namespace AFS_Visicon.Data
     public class UsersDbContext : DbContext
     {
         /// <summary>
-        /// Initialize the database
+        /// Data soure
         /// </summary>
-        public UsersDbContext()
+        static UsersDbContext()
         {
             Database.SetInitializer<UsersDbContext>(new UserInitializer());
         }
 
-        //Representation of table
+        //Representation of user table
         public DbSet<User> Users { get; set; }
     }
 }

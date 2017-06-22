@@ -13,29 +13,29 @@ namespace AFS_Visicon.Controllers
         /// <summary>
         /// Home page of web application, display all users
         /// </summary>
-        /// <param name="sortKey">user attribute name by we sorting users</param>
+        /// <param name="sortKey">user attributefor sorting</param>
         /// <param name="lastSortKey">name of last sorting attribute </param>
-        /// <param name="searchString">searching name of users</param>
+        /// <param name="searchString">name of user to search</param>
         /// <returns>view with filtered users</returns>
         public ActionResult Index(string sortKey, string lastSortKey, string searchString)
         {
             using (UsersDbContext context = new UsersDbContext())
             {
-                //List of all users
+                // List of all users
                 List<User> users = context.Users.ToList();
 
-                //Filtring users by their name
+                // Filtring users by their name
                 if (!String.IsNullOrEmpty(searchString))
                 {
                     users = users.Where(x => x.FirstName.Contains(searchString) || x.LastName.Contains(searchString)).ToList();
                 }
 
                 bool ascending = true;
-                //first time set sorting by name of user
+                // first time set sorting by name of user
                 if (sortKey == null)
-                    sortKey = "FirstName";
+                    sortKey = nameof(AFS_Visicon.Models.User.FirstName);
 
-                //choose type of sorting (asc, desc), switching value by choosing same attribute
+                // choose type of sorting (asc, desc), switching value by choosing same attribute
                 if (lastSortKey != null && sortKey == lastSortKey)
                 {
                     ascending = false;
@@ -46,16 +46,16 @@ namespace AFS_Visicon.Controllers
                     ViewBag.lastSortKey = sortKey;
                 }
 
-                //sort users by specific attribute 
+                // sort users by specific attribute 
                 switch (sortKey)
                 {
-                    case "FirstName":
+                    case nameof(AFS_Visicon.Models.User.FirstName):
                         users = ascending ? users.OrderBy(x => x.FirstName).ToList() : users.OrderByDescending(x => x.FirstName).ToList();
                         break;
-                    case "LastName":
+                    case nameof(AFS_Visicon.Models.User.LastName):
                         users = ascending ? users.OrderBy(x => x.LastName).ToList() : users.OrderByDescending(x => x.LastName).ToList();
                         break;
-                    case "DateOfBirth":
+                    case nameof(AFS_Visicon.Models.User.DateOfBirth):
                     case "Age":
                         users = ascending ? users.OrderBy(x => x.DateOfBirth).ToList() : users.OrderByDescending(x => x.DateOfBirth).ToList();
                         break;
@@ -66,7 +66,7 @@ namespace AFS_Visicon.Controllers
         }
 
         /// <summary>
-        /// Show create page
+        /// Create new user form
         /// </summary>
         /// <returns>Empty view</returns>
         public ActionResult Create()
@@ -77,8 +77,8 @@ namespace AFS_Visicon.Controllers
         /// <summary>
         /// Add user to database
         /// </summary>
-        /// <param name="user">info about creating user</param>
-        /// <returns>Redirect to home page</returns>
+        /// <param name="user">user model</param>
+        /// <returns>Redirect to home page if insert was successfull, otherwise show model errors</returns>
         [HttpPost]
         public ActionResult Create(User user)
         {
@@ -99,7 +99,7 @@ namespace AFS_Visicon.Controllers
         /// Show user info for editing
         /// </summary>
         /// <param name="id">id of user</param>
-        /// <returns>Editing page</returns>
+        /// <returns>Editing page, otherwise 404</returns>
         public ActionResult Edit(int id)
         {
             using (UsersDbContext context = new UsersDbContext())
@@ -118,23 +118,23 @@ namespace AFS_Visicon.Controllers
         /// Edit existing user
         /// </summary>
         /// <param name="id">user id</param>
-        /// <param name="user">info of user</param>
+        /// <param name="user">changed user model</param>
         /// <returns>Show user with changed values</returns>
         [HttpPost]
         public ActionResult Edit(int id, User user)
         {
             using (UsersDbContext context = new UsersDbContext())
             {
-                User _user = context.Users.Single(x => x.UserID == id);
+                User DbUser = context.Users.Single(x => x.UserID == id);
 
                 if (ModelState.IsValid)
                 {
-                    //set user attributes
-                    _user.FirstName = user.FirstName;
-                    _user.LastName = user.LastName;
-                    _user.DateOfBirth = user.DateOfBirth;
-                    _user.Mobil = user.Mobil;
-                    _user.Email = user.Email;
+                    // set user attributes
+                    DbUser.FirstName = user.FirstName;
+                    DbUser.LastName = user.LastName;
+                    DbUser.DateOfBirth = user.DateOfBirth;
+                    DbUser.Mobil = user.Mobil;
+                    DbUser.Email = user.Email;
 
                     context.SaveChanges();
                     return RedirectToAction("Index");
@@ -143,8 +143,9 @@ namespace AFS_Visicon.Controllers
                 return View(user);
             }
         }
+
         /// <summary>
-        /// Show user info for deleting
+        /// Show user info delete form
         /// </summary>
         /// <param name="id">id of user</param>
         /// <returns>View info of user</returns>
@@ -162,12 +163,13 @@ namespace AFS_Visicon.Controllers
                 return View(user);
             }
         }
+
         /// <summary>
-        /// Delete user
+        /// Delete user by id
         /// </summary>
         /// <param name="id">Id of user</param>
-        /// <param name="user">User info</param>
-        /// <returns>Show empty values of user</returns>
+        /// <param name="user">User model</param>
+        /// <returns>redirect to home page</returns>
         [HttpPost]
         public ActionResult Delete(int id, User user)
         {
