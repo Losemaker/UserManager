@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace AFS_Visicon.Controllers
 {
@@ -21,47 +22,34 @@ namespace AFS_Visicon.Controllers
         {
             using (UsersDbContext context = new UsersDbContext())
             {
-                // List of all users
+                return View();
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public ActionResult AjaxHandler(jQueryDataTableParamModel param)
+        {
+            using(UsersDbContext context = new UsersDbContext())
+            {
                 List<User> users = context.Users.ToList();
 
-                // Filtring users by their name
-                if (!String.IsNullOrEmpty(searchString))
-                {
-                    users = users.Where(x => x.FirstName.Contains(searchString) || x.LastName.Contains(searchString)).ToList();
-                }
+                var today = DateTime.Today;
 
-                bool ascending = true;
-                // first time set sorting by name of user
-                if (sortKey == null)
-                    sortKey = nameof(AFS_Visicon.Models.User.FirstName);
+                var result = from u in users select new[] { u.FirstName, u.LastName, (DateTime.Today.Year - u.DateOfBirth.Year).ToString(), u.DateOfBirth.ToShortDateString(), u.Mobil,  u.Email};
 
-                // choose type of sorting (asc, desc), switching value by choosing same attribute
-                if (lastSortKey != null && sortKey == lastSortKey)
+                JsonResult jsonR = Json(new
                 {
-                    ascending = false;
-                    ViewBag.lastSortKey = null;
-                }
-                else
-                {
-                    ViewBag.lastSortKey = sortKey;
-                }
+                    aaData = result
+                },
+                JsonRequestBehavior.AllowGet);
 
-                // sort users by specific attribute 
-                switch (sortKey)
-                {
-                    case nameof(AFS_Visicon.Models.User.FirstName):
-                        users = ascending ? users.OrderBy(x => x.FirstName).ToList() : users.OrderByDescending(x => x.FirstName).ToList();
-                        break;
-                    case nameof(AFS_Visicon.Models.User.LastName):
-                        users = ascending ? users.OrderBy(x => x.LastName).ToList() : users.OrderByDescending(x => x.LastName).ToList();
-                        break;
-                    case nameof(AFS_Visicon.Models.User.DateOfBirth):
-                    case "Age":
-                        users = ascending ? users.OrderBy(x => x.DateOfBirth).ToList() : users.OrderByDescending(x => x.DateOfBirth).ToList();
-                        break;
-                }
+                string json = new JavaScriptSerializer().Serialize(jsonR.Data);
 
-                return View(users);
+                return jsonR;
             }
         }
 
@@ -145,10 +133,10 @@ namespace AFS_Visicon.Controllers
         }
 
         /// <summary>
-        /// Show user info delete form
+        /// Delete user by id
         /// </summary>
         /// <param name="id">id of user</param>
-        /// <returns>View info of user</returns>
+        /// <returns>Homepage</returns>
         public ActionResult Delete(int id)
         {
             using (UsersDbContext context = new UsersDbContext())
@@ -159,35 +147,17 @@ namespace AFS_Visicon.Controllers
                 {
                     return HttpNotFound();
                 }
-
-                return View(user);
-            }
-        }
-
-        /// <summary>
-        /// Delete user by id
-        /// </summary>
-        /// <param name="id">Id of user</param>
-        /// <param name="user">User model</param>
-        /// <returns>redirect to home page</returns>
-        [HttpPost]
-        public ActionResult Delete(int id, User user)
-        {
-            using (UsersDbContext context = new UsersDbContext())
-            {
-                User _user = context.Users.Single(x => x.UserID == id);
-
-                if (ModelState.IsValid)
+                else
                 {
-                    //remove user from database
-                    context.Users.Remove(_user);
+                    context.Users.Remove(user);
                     context.SaveChanges();
 
                     return RedirectToAction("Index");
                 }
 
-                return View(user);
             }
         }
+
+
     }
 }

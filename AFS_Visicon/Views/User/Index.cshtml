@@ -6,28 +6,22 @@
 
 <h2>Table of users</h2>
 
-@using (Html.BeginForm())
-{
-    <p>
-        @Html.TextBox("SearchString", "", new { placeholder = "Find user by name" })
-        <input type="submit" value="Search" class="btn btn-info" />
-    </p>
-}
 
-<table class="table table-hover table-bordered table-condensed">
+
+<table id="userDataTable" class="display">
     <thead class="table-bordered">
         <tr>
             <th>
-                @Html.ActionLink("First name", "Index", new { sortKey = nameof(AFS_Visicon.Models.User.FirstName), lastSortKey = ViewBag.lastSortKey })
+                @Html.DisplayNameFor(model => model.FirstName)
             </th>
             <th>
-                @Html.ActionLink("Last name", "Index", new { sortKey = nameof(AFS_Visicon.Models.User.LastName), lastSortKey = ViewBag.lastSortKey })
+                @Html.DisplayNameFor(model => model.LastName)
             </th>
             <th>
-                @Html.ActionLink("Date of birth", "Index", new { sortKey = nameof(AFS_Visicon.Models.User.DateOfBirth), lastSortKey = ViewBag.lastSortKey })
+                Age
             </th>
             <th>
-                @Html.ActionLink("Age", "Index", new { sortKey = "Age", lastSortKey = ViewBag.lastSortKey })
+                @Html.DisplayNameFor(model => model.DateOfBirth)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Mobil)
@@ -35,50 +29,13 @@
             <th>
                 @Html.DisplayNameFor(model => model.Email)
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LastName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateOfBirth)
-                </td>
-                <td>
-                    @{
-                        var today = DateTime.Today;
-                        var age = today.Year - item.DateOfBirth.Year;
-                        if (item.DateOfBirth > today.AddYears(-age))
-                        {
-                            age--;
-                        }
-
-                        @Html.DisplayFor(modelItem => age)
-                    }
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Mobil)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                <td>
-                    <input type="button" class="btn btn-warning btn-sm" value="Edit" onclick="location.href='@Url.Action("Edit", "User", new { id=item.UserID })'" />
-                    <input type="button" class="btn btn-danger btn-sm" value="Delete" onclick="location.href='@Url.Action("Delete", "User", new { id=item.UserID })'" />
-                </td>
-            </tr>
-
-                        }
     </tbody>
 </table>
 
 <p>
     <input type="button" class="btn btn-success btn-lg" value="Create new user" onclick="location.href='@Url.Action("Create", "User")'" />
 </p>
+

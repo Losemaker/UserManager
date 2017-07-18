@@ -136,6 +136,7 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\Index.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -149,6 +150,7 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Data\jQueryDataTableParamModel.cs" />
     <Compile Include="Data\UserInitializer.cs" />
     <Compile Include="Data\UsersDbContext.cs" />
     <Compile Include="Global.asax.cs">
