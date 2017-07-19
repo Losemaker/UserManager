@@ -39,15 +39,13 @@ namespace AFS_Visicon.Controllers
 
                 var today = DateTime.Today;
 
-                var result = from u in users select new[] { u.FirstName, u.LastName, (DateTime.Today.Year - u.DateOfBirth.Year).ToString(), u.DateOfBirth.ToShortDateString(), u.Mobil,  u.Email};
+                var result = from u in users select new[] { u.UserID.ToString(), u.FirstName, u.LastName, (DateTime.Today.Year - u.DateOfBirth.Year).ToString(), u.DateOfBirth.ToShortDateString(), u.Mobil,  u.Email};
 
                 JsonResult jsonR = Json(new
                 {
                     aaData = result
                 },
                 JsonRequestBehavior.AllowGet);
-
-                string json = new JavaScriptSerializer().Serialize(jsonR.Data);
 
                 return jsonR;
             }
@@ -90,6 +88,7 @@ namespace AFS_Visicon.Controllers
         /// <returns>Editing page, otherwise 404</returns>
         public ActionResult Edit(int id)
         {
+
             using (UsersDbContext context = new UsersDbContext())
             {
                 User user = context.Users.Single(x => x.UserID == id);
@@ -108,7 +107,6 @@ namespace AFS_Visicon.Controllers
         /// <param name="id">user id</param>
         /// <param name="user">changed user model</param>
         /// <returns>Show user with changed values</returns>
-        [HttpPost]
         public ActionResult Edit(int id, User user)
         {
             using (UsersDbContext context = new UsersDbContext())
@@ -136,8 +134,8 @@ namespace AFS_Visicon.Controllers
         /// Delete user by id
         /// </summary>
         /// <param name="id">id of user</param>
-        /// <returns>Homepage</returns>
-        public ActionResult Delete(int id)
+        /// <returns>Result message</returns>
+        public string Delete(int id)
         {
             using (UsersDbContext context = new UsersDbContext())
             {
@@ -145,14 +143,14 @@ namespace AFS_Visicon.Controllers
 
                 if (user == null)
                 {
-                    return HttpNotFound();
+                    return "User doesn't exist!"; 
                 }
                 else
                 {
                     context.Users.Remove(user);
                     context.SaveChanges();
 
-                    return RedirectToAction("Index");
+                    return "User was deleted.";
                 }
 
             }

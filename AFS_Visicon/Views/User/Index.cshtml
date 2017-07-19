@@ -12,6 +12,8 @@
     <thead class="table-bordered">
         <tr>
             <th>
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.FirstName)
             </th>
             <th>
@@ -29,6 +31,8 @@
             <th>
                 @Html.DisplayNameFor(model => model.Email)
             </th>
+            <th>
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -39,3 +43,4 @@
     <input type="button" class="btn btn-success btn-lg" value="Create new user" onclick="location.href='@Url.Action("Create", "User")'" />
 </p>
 
+<div class="divContent"/>
