@@ -27,25 +27,21 @@ namespace AFS_Visicon.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Get data for user table.
         /// </summary>
-        /// <param name="param"></param>
-        /// <returns></returns>
-        public ActionResult AjaxHandler(jQueryDataTableParamModel param)
+        /// <returns>data dor table in JSON format</returns>
+        public ActionResult TableRender()
         {
             using(UsersDbContext context = new UsersDbContext())
             {
                 List<User> users = context.Users.ToList();
-
-                var today = DateTime.Today;
 
                 var result = from u in users select new[] { u.UserID.ToString(), u.FirstName, u.LastName, (DateTime.Today.Year - u.DateOfBirth.Year).ToString(), u.DateOfBirth.ToShortDateString(), u.Mobil,  u.Email};
 
                 JsonResult jsonR = Json(new
                 {
                     aaData = result
-                },
-                JsonRequestBehavior.AllowGet);
+                },JsonRequestBehavior.AllowGet);
 
                 return jsonR;
             }
@@ -107,6 +103,7 @@ namespace AFS_Visicon.Controllers
         /// <param name="id">user id</param>
         /// <param name="user">changed user model</param>
         /// <returns>Show user with changed values</returns>
+        [HttpPost]
         public ActionResult Edit(int id, User user)
         {
             using (UsersDbContext context = new UsersDbContext())
