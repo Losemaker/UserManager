@@ -132,22 +132,16 @@ namespace AFS_Visicon.Controllers
         /// </summary>
         /// <param name="id">id of user</param>
         /// <returns>Result message</returns>
-        public string Delete(int id)
+        public void Delete(int id)
         {
             using (UsersDbContext context = new UsersDbContext())
             {
                 User user = context.Users.Single(x => x.UserID == id);
 
-                if (user == null)
-                {
-                    return "User doesn't exist!"; 
-                }
-                else
+                if(user != null)
                 {
                     context.Users.Remove(user);
                     context.SaveChanges();
-
-                    return "User was deleted.";
                 }
 
             }
